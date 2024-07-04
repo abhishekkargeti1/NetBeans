@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.cookies;
+package com.practice;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author abhis
  */
-public class secondServlet extends HttpServlet {
+public class firstServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,34 +35,16 @@ public class secondServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet secondServlet</title>");            
+            out.println("<title>Servlet firstServlet</title>");            
             out.println("</head>");
             out.println("<body>");
             
-            // getting all cookies
-            
-            Cookie cookies[]=request.getCookies();
-            boolean found= false;
-            String Name="";
-            if(cookies == null){
-                out.println("<h1>You are you user go to home page and submit your name</h1>");
-                return;
-            }else{
-                for(Cookie c:cookies){
-                    String tname=c.getName();
-                    if(tname.equals("user_name")){
-                        found=true;
-                        Name=c.getValue();
-                    
-                    }
-                }
-            
-            }
-            if(found){
-                out.println("<h3>Hello "+Name+" Welcome again to my website</h3>");
-            }else{
-                out.println("<h1>You are you user go to home page and submit your name</h1>");
-            }
+           String name = request.getParameter("fname");
+           out.println("<h3>Hello "+name+" Welcome to my website</h3>");
+           out.println("<h3>Thankyou for visit</h3>");
+           out.println("<a href='secondServlet'>Click here</a>");
+           Cookie c1 = new Cookie("fname",name);
+            response.addCookie(c1);
             out.println("</body>");
             out.println("</html>");
         }

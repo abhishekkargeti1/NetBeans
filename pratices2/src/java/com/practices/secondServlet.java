@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.cookies;
+package com.practices;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -38,31 +38,24 @@ public class secondServlet extends HttpServlet {
             out.println("<title>Servlet secondServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            
-            // getting all cookies
-            
-            Cookie cookies[]=request.getCookies();
-            boolean found= false;
-            String Name="";
-            if(cookies == null){
-                out.println("<h1>You are you user go to home page and submit your name</h1>");
-                return;
+            String name="";
+            Cookie c[]=request.getCookies();
+            boolean found=false;
+            if(c==null){
+            out.println("<h3>Please submit your name</h3>");
             }else{
-                for(Cookie c:cookies){
-                    String tname=c.getName();
-                    if(tname.equals("user_name")){
+                for(Cookie c1:c){
+                    String user_name=c1.getName();
+                    if(user_name.equals("fname")){
+                        name = c1.getValue();
                         found=true;
-                        Name=c.getValue();
-                    
                     }
+                
                 }
             
+            
             }
-            if(found){
-                out.println("<h3>Hello "+Name+" Welcome again to my website</h3>");
-            }else{
-                out.println("<h1>You are you user go to home page and submit your name</h1>");
-            }
+            out.println("<h3>Welcome back <h3> "+name+" to our website once again");
             out.println("</body>");
             out.println("</html>");
         }

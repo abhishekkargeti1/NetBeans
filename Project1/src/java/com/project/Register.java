@@ -2,21 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.cookies;
+package com.project;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.sql.*;
 
 /**
  *
- * @author abhis
+ * @author user
  */
-public class secondServlet extends HttpServlet {
+@MultipartConfig
+public class Register extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,39 +38,48 @@ public class secondServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet secondServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
             
-            // getting all cookies
             
-            Cookie cookies[]=request.getCookies();
-            boolean found= false;
-            String Name="";
-            if(cookies == null){
-                out.println("<h1>You are you user go to home page and submit your name</h1>");
-                return;
-            }else{
-                for(Cookie c:cookies){
-                    String tname=c.getName();
-                    if(tname.equals("user_name")){
-                        found=true;
-                        Name=c.getValue();
-                    
-                    }
-                }
+
+            // Getting user details
+            String Name= request.getParameter("user_name");
+            String Email= request.getParameter("user_email");
+            String Password= request.getParameter("user_password");
+            Part part=request.getPart("fileUpload");
+            String Filename = part.getSubmittedFileName();
+//            out.println(Filename);
             
+            // JDBC Connection and Query 
+            try{
+                
+                   // Theard sleep
+                
+                Thread.sleep(3000);
+                 // JDBC Connection and Query 
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/login","root","1808");
+                // Query 
+                String q="insert into User_details(Name,password,Email,imagename)value(?,?,?,?)";
+                PreparedStatement pstmt=con.prepareStatement(q);
+                pstmt.setString(1,Name);
+                pstmt.setString(2,Password);
+                pstmt.setString(3,Email);
+                pstmt.setString(4,Filename);
+                pstmt.executeUpdate();
+                InputStream input = part.getInputStream();
+                byte []filestored= new byte[input.available()];
+                input.read(filestored);
+                String path = getServletContext().getRealPath("/")+"image"+File.separator+Filename;
+//                out.println(path);
+                FileOutputStream output = new FileOutputStream(path);
+                output.write(filestored);
+                output.close();
+               System.out.println("Done");
+            }catch(Exception e){
+                System.out.println("Error"); 
+                e.printStackTrace();
             }
-            if(found){
-                out.println("<h3>Hello "+Name+" Welcome again to my website</h3>");
-            }else{
-                out.println("<h1>You are you user go to home page and submit your name</h1>");
-            }
-            out.println("</body>");
-            out.println("</html>");
+            
         }
     }
 

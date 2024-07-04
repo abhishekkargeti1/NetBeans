@@ -2,12 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.cookies;
+package com.pratical;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author abhis
  */
-public class secondServlet extends HttpServlet {
+public class Servlet1 extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,34 +34,15 @@ public class secondServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet secondServlet</title>");            
+            out.println("<title>Servlet Servlet1</title>");            
             out.println("</head>");
             out.println("<body>");
+            String name = request.getParameter("fname");
+            out.println("<h1> Welcome "+name+" to our website <h1>");
+            // hidden form field
+            out.println("<form action='Servlet2'>"+
+                    "<input type='hidden'name='user_name' value='"+name+"'>"+"<button>Go to 2 servlet </button>"+"</form>");
             
-            // getting all cookies
-            
-            Cookie cookies[]=request.getCookies();
-            boolean found= false;
-            String Name="";
-            if(cookies == null){
-                out.println("<h1>You are you user go to home page and submit your name</h1>");
-                return;
-            }else{
-                for(Cookie c:cookies){
-                    String tname=c.getName();
-                    if(tname.equals("user_name")){
-                        found=true;
-                        Name=c.getValue();
-                    
-                    }
-                }
-            
-            }
-            if(found){
-                out.println("<h3>Hello "+Name+" Welcome again to my website</h3>");
-            }else{
-                out.println("<h1>You are you user go to home page and submit your name</h1>");
-            }
             out.println("</body>");
             out.println("</html>");
         }
